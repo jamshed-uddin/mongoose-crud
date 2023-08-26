@@ -9,6 +9,7 @@ const Todo = new mongoose.model("Todo", todoSchema);
 router.get("/", async (req, res) => {
   await Todo.find()
     .select({ _id: 0, __v: 0 })
+    .limit()
     .then((result) => res.status(201).json(result))
     .catch((error) => res.status(401).json({ error: "Something went wrong" }));
 });
@@ -55,6 +56,14 @@ router.put("/:id", async (req, res) => {
 });
 
 //  delete todo
-router.delete("/:id", async (req, res) => {});
+router.delete("/:id", async (req, res) => {
+  await Todo.deleteOne({ _id: req.params.id })
+    .then((result) => {
+      if (result.deletedCount) {
+        res.json({ message: "Todo deleted successfully" });
+      }
+    })
+    .catch((error) => res.status(401).json({ error: error.message }));
+});
 
 module.exports = router;
