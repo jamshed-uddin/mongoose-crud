@@ -5,14 +5,20 @@ const todoSchema = require("../schema/todoSchema");
 
 const Todo = new mongoose.model("Todo", todoSchema);
 //get all todo
+//in mongoose we don't need to use .toArray with .find method.mongoose already returns an array of abjects. .select() with .find() if we want not to send specific field like .find().select({_id:0})  .it takes an object
 router.get("/", async (req, res) => {
   await Todo.find()
+    .select({ _id: 0, __v: 0 })
     .then((result) => res.status(201).json(result))
     .catch((error) => res.status(401).json({ error: "Something went wrong" }));
 });
 
 //get a todo by id
-router.get("/:id", async (req, res) => {});
+router.get("/:id", async (req, res) => {
+  await Todo.findOne({ _id: req.params.id })
+    .then((result) => res.send(result))
+    .catch((error) => res.status(401).json({ error: "Something went wrong" }));
+});
 
 //post a todo
 router.post("/", async (req, res) => {
