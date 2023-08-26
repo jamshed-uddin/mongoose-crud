@@ -31,7 +31,16 @@ router.post("/multiple", async (req, res) => {
 });
 
 //  update todo
-router.put("/:id", async (req, res) => {});
+router.put("/:id", async (req, res) => {
+  await Todo.updateOne(
+    { _id: req.params.id },
+    { $set: { status: req.body.status } }
+  )
+    .then(() => {
+      res.status(200).json({ message: "Todo updated successfully" });
+    })
+    .catch((error) => res.status(401).json({ error: "Something went wrong" }));
+});
 
 //  delete todo
 router.delete("/:id", async (req, res) => {});
