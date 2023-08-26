@@ -5,7 +5,11 @@ const todoSchema = require("../schema/todoSchema");
 
 const Todo = new mongoose.model("Todo", todoSchema);
 //get all todo
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+  await Todo.find()
+    .then((result) => res.status(201).json(result))
+    .catch((error) => res.status(401).json({ error: "Something went wrong" }));
+});
 
 //get a todo by id
 router.get("/:id", async (req, res) => {});
@@ -30,11 +34,12 @@ router.post("/multiple", async (req, res) => {
     .catch((error) => res.status(401).json({ error: "Something went wrong" }));
 });
 
-//  update todo /// findByIdAndUpdate returns updated document if we provide {new: true} option. if we use updateOne it doesn't returns complete updated document it returns only update statuses like modifiedCount: 1, if we want to get updated document we have to find that document separately by findOne method.
+//  update todo /
+// findByIdAndUpdate returns updated document if we provide {new: true} option. if we use updateOne it doesn't returns complete updated document it returns only update statuses like modifiedCount: 1, if we want to get updated document we have to find that document separately by findOne method.
 router.put("/:id", async (req, res) => {
   await Todo.findByIdAndUpdate(
     { _id: req.params.id },
-    { $set: { status: req.body.description } },
+    { $set: { status: req.body.status } },
     { new: true }
   )
     .then((result) => {
