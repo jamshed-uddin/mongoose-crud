@@ -30,16 +30,17 @@ router.post("/multiple", async (req, res) => {
     .catch((error) => res.status(401).json({ error: "Something went wrong" }));
 });
 
-//  update todo
+//  update todo /// findByIdAndUpdate returns updated document if we provide {new: true} option. if we use updateOne it doesn't returns complete updated document it returns only update statuses like modifiedCount: 1, if we want to get updated document we have to find that document separately by findOne method.
 router.put("/:id", async (req, res) => {
-  await Todo.updateOne(
+  await Todo.findByIdAndUpdate(
     { _id: req.params.id },
-    { $set: { status: req.body.status } }
+    { $set: { status: req.body.description } },
+    { new: true }
   )
-    .then(() => {
-      res.status(200).json({ message: "Todo updated successfully" });
+    .then((result) => {
+      res.status(200).json({ message: "Todo updated successfully", result });
     })
-    .catch((error) => res.status(401).json({ error: "Something went wrong" }));
+    .catch((error) => res.status(401).json({ error: error.message }));
 });
 
 //  delete todo
