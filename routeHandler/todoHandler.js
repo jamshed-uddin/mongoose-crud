@@ -5,7 +5,7 @@ const todoSchema = require("../schema/todoSchema");
 
 const Todo = new mongoose.model("Todo", todoSchema);
 //get all todo
-//in mongoose we don't need to use .toArray with .find method.mongoose already returns an array of abjects. .select() with .find() if we want not to send specific field like .find().select({_id:0})  .it takes an object
+//in mongoose we don't need to use .toArray with .find method.mongoose already returns an array of abjects. .select() with .find() if we want not to send specific field like .find().select({_id:0})  .it takes an object. .limit(number) to limit the number of document we want to send as response.
 router.get("/", async (req, res) => {
   await Todo.find()
     .select({ _id: 0, __v: 0 })
