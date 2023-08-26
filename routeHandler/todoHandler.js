@@ -22,7 +22,13 @@ router.post("/", async (req, res) => {
 });
 
 //post multiple todo
-router.post("/multiple", async (req, res) => {});
+router.post("/multiple", async (req, res) => {
+  await Todo.insertMany(req.body)
+    .then(() => {
+      res.status(200).json({ message: "Multiple todos inserted successfully" });
+    })
+    .catch((error) => res.status(401).json({ error: "Something went wrong" }));
+});
 
 //  update todo
 router.put("/:id", async (req, res) => {});
