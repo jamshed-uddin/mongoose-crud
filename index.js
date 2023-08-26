@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const todoHandler = require("./routeHandler/todoHandler");
 const cors = require("cors");
 const app = express();
 
@@ -14,6 +15,8 @@ mongoose
     console.log("connected to database");
   })
   .catch((error) => console.log(error));
+
+app.use("/todo", todoHandler);
 
 app.get("/", (req, res) => {
   res.send("mongoose crud is running");
